@@ -1,29 +1,3 @@
-
-
-/**
- * TODO: Accept input in body somehow
- * TODO: Modal queue
- * TODO: Modal events.
- *
- *
- * BUTTONS:
- * Create an array of buttons with:
- * var buttons = [
- *     uModal.createButton("Ok", someFunction), // or
- *     uModal.createButton("Cancel", uModal.buttonAction.CLOSE)
- * ];
- *
- *
- * OPTIONS:
- * Define options inside of a dictionary like so:
- * var options = {
- *     option: value
- * };
- *
- * The following options are available for use:
- *  - closeOnBackgroundClick [bool] Closes the modal if the user clicks on the background.
- */
-
 (function(window){
 
     "use strict";
@@ -31,25 +5,27 @@
 
     function defineUModal() {
 
-        var uModal = {};
-
-
-
-
         /**
          * init
          */
 
-        var init = function() {
-            var uModalWrapper = document.createElement("div");
-            uModalWrapper.className = "uModal-wrapper";
-            document.body.appendChild(uModalWrapper);
-        }
-
-        init();
+        var uModal = {};
 
 
+        // Wrapper
+        var uModalWrapper = document.createElement("div");
+        uModalWrapper.className = "uModal-wrapper";
 
+
+        // Modal Inner
+        var uModalInner = document.createElement("div");
+        uModalInner.className = "uModal-inner";
+        uModalWrapper.appendChild(uModalInner);
+
+
+        document.body.appendChild(uModalWrapper);
+
+        
 
         /**
          * Modal
@@ -102,7 +78,6 @@
 
 
 
-
         /**
          * Button
          * @constructor
@@ -122,7 +97,6 @@
 
 
 
-
         /**
          * Button Actions
          * @enum {string}
@@ -131,7 +105,6 @@
         uModal.buttonAction = {
             CLOSE: "close"
         };
-
 
 
 
@@ -185,7 +158,6 @@
 
 
 
-
         /**
          * Create Button
          * @param {string} text   Text to be displayed on the button.
@@ -201,11 +173,9 @@
                 text = "";
             }
 
-
             return new ModalButton(text, action);
 
         }
-
 
 
 
@@ -216,7 +186,7 @@
 
         var renderModal = function(modal){
 
-            var wrapper = document.querySelector(".uModal-wrapper");
+            var wrapper = document.querySelector(".uModal-inner");
 
 
             // Modal
@@ -248,11 +218,9 @@
             modalElem.appendChild(buttonWrapper);
 
 
-
             wrapper.appendChild(modalElem);
 
         }
-
 
 
 
@@ -285,7 +253,6 @@
             return contentWrapper;
 
         }
-
 
 
 
@@ -337,7 +304,6 @@
 
 
 
-
         /**
          * GUID
          * Generates a new random GUID. Note: This may not be truly unique, but the
@@ -355,7 +321,6 @@
 
 
 
-
         /**
          * s4
          * A helper function for generating GUIDs.
@@ -367,8 +332,6 @@
                 .toString(16)
                 .substring(1);
         }
-
-
 
         
         return uModal;

@@ -1,0 +1,35 @@
+
+/**
+ * Modal Wrapper
+ */
+
+.uModal-wrapper {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10000;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+
+
+/**
+ * Modal Inner
+ */
+
+.uModal-inner {
+    margin: 2rem auto;
+    max-width: 700px;
+    background: white;
+    pointer-events: all;
+    padding: 3rem;
+    padding-top: 2rem;
+    background: #FCF7F8;
+    border-radius: 3px;
+    box-shadow:
+         20px 15px 25px rgba(0, 0, 0, 0.1),
+        -20px 15px 25px rgba(0, 0, 0, 0.1);
+}

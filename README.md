@@ -4,11 +4,27 @@ uModal is a powerful modal management tool with zero dependencies.
 
 ## Basic Usage
 
-To create the most basic modal possible, simply use:
+1. Download the [latest version](https://github.com/LuckehPickle/uModal/releases) of uModal.
 
-```javascript
-uModal.create("Modal title.", "Modal body.");
-```
+2. Add uModal to your page.
+
+    ```html
+    <head>
+        ...
+        <link rel="stylesheet" href="path/to/uModal.css">
+    </head>
+    
+    <body>
+        ...
+        <script src="path/to/uModal.min.js"></script>
+    </body>
+    ```
+
+3. To create the most basic modal possible, simply use:
+
+    ```javascript
+    uModal.create("Modal title.", "Modal body.");
+    ```
 
 
 ## Advanced Usage
@@ -22,7 +38,7 @@ uModal provides a number of different modal types.
  * Warning
  * Error
 
-Define a modals type by using the following:
+Define a modal type by using the following:
 
 ```javascript
 uModal.create(title, body, uModal.type.WARNING);
