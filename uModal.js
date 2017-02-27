@@ -15,15 +15,19 @@
         // Wrapper
         var uModalWrapper = document.createElement("div");
         uModalWrapper.className = "uModal-wrapper";
+        // uModalWrapper.setAttribute("active", "");
 
 
-        // Modal Inner
+        // Modal Innerjs 
         var uModalInner = document.createElement("div");
         uModalInner.className = "uModal-inner";
         uModalWrapper.appendChild(uModalInner);
 
 
         document.body.appendChild(uModalWrapper);
+
+
+        window.modalQueue = [];
 
         
 
@@ -110,11 +114,12 @@
 
         /**
          * uModal Create
-         * @param {string} title   Modal title.
-         * @param {string} body    Modal contents/body.
-         * @param {object} type    Type of modal.
-         * @param {array}  buttons A list of all modal buttons.
-         * @param {object} options Modal options.
+         * @param {string} title Modal title.
+         * @param {string} body Modal contents/body.
+         * @param {object|null} type Type of modal.
+         * @param {array|null} buttons A list of all modal buttons.
+         * @param {object|null} options Modal options.
+         * @return {object} A new modal object.
          */
 
         uModal.create = function(title, body, type, buttons, options) {
@@ -160,8 +165,9 @@
 
         /**
          * Create Button
-         * @param {string} text   Text to be displayed on the button.
-         * @param {object} action Action/function to be completed when clicked.
+         * @param {string|null} text   Text to be displayed on the button.
+         * @param {object|null} action Action/function to be completed when clicked.
+         * @return {object} A new modal button.
          */
 
         uModal.createButton = function(text, action) {
@@ -192,6 +198,7 @@
             // Modal
             var modalElem = document.createElement("div");
             modalElem.className = "uModal " + modal.type.class;
+            modalElem.setAttribute("guid", modal.guid);
 
 
             // Content
@@ -216,9 +223,11 @@
             }
 
             modalElem.appendChild(buttonWrapper);
-
+            modal.element = modalElem;
 
             wrapper.appendChild(modalElem);
+
+            addToQueue(modal);
 
         }
 
@@ -228,6 +237,7 @@
          * Render Modal Content
          * Creates a modal content wrapper to be included inside of a modal.
          * @param {object} modal Modal to extract content from.
+         * @return {object} Content to be added to document body.
          */
 
         var renderModalContent = function(modal) {
@@ -260,6 +270,7 @@
          * Render Button
          * Creates a button to be included in a modal.
          * @param {object} button Button to be rendered.
+         * @return {object} Rendered button.
          */
 
         var renderButton = function(button) {
@@ -278,7 +289,15 @@
 
                     case "close":
                         action = function(event) {
-                            console.log("Close modal");
+                            var target = event.target;
+                            while (!target.hasAttribute("guid")) {
+                                if (target.tagName.toLowerCase() == "body") {
+                                    return;
+                                }
+                                target = target.parentElement;
+                            }
+
+                            uModal.closeModal(target.getAttribute("guid"));
                         };
                         break;
 
@@ -300,6 +319,73 @@
 
             return buttonElem;
 
+        }
+
+
+
+        /**
+         * Add To Queue
+         * Queues a modal to be displayed.
+         * @param {object} modal Modal to be queued.
+         */
+
+        var addToQueue = function(modal) {
+
+            var wrapper = document.querySelector(".uModal-wrapper");
+
+            if (wrapper.hasAttribute("active")) {
+                window.modalQueue.push(modal);
+            } else {
+                modal.element.setAttribute("active", "");
+                wrapper.setAttribute("active", "");
+            }
+
+        }
+
+
+
+        /**
+         * Close Modal
+         * Either closes a modal or removes it from the modal queue.
+         * @param {string|object} modal 
+         */
+
+        uModal.closeModal = function(modal) {
+
+            if (typeof modal === "undefined") {
+                
+                console.error("No modal was defined. Provide either a GUID or a modal object.");
+                return;
+
+            } else if (typeof modal === "string") {
+
+                var modals = document.querySelectorAll(".uModal");
+
+                for (var i = 0; i < modals.length; i++) {
+                    
+                    var m = modals[i];
+                    if (m.getAttribute("guid") == modal) {
+                        removeModalElement(m);
+                        break;
+                    }
+
+                }
+
+            } else if (typeof modal === "object") {
+                removeModalElement(modal.element);
+            }
+
+        }
+
+
+
+        /**
+         * Remove Modal Element
+         */
+
+        var removeModalElement = function(element) {
+            console.log(element);
+            // Remove element, show next item in queue.
         }
 
 
